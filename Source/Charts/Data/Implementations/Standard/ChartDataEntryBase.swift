@@ -19,8 +19,24 @@ open class ChartDataEntryBase: NSObject
     /// optional spot for additional data this Entry represents
     @objc open var data: Any?
     
+    @objc open var imageBlock: ((ChartDataEntryBase) -> NSUIImage?)? = nil
+    
     /// optional icon image
-    @objc open var icon: NSUIImage?
+    private var _icon: NSUIImage? = nil
+    @objc open var icon: NSUIImage? {
+        get {
+            if let _icon = _icon {
+                return _icon
+            }
+            if let imageBlock = imageBlock {
+                return imageBlock(self)
+            }
+            return nil
+        }
+        set(newValue) {
+            _icon = newValue
+        }
+    }
     
     public override required init()
     {
